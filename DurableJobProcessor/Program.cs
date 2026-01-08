@@ -20,14 +20,26 @@ var host = new HostBuilder()
         });
 
         // Register Dataverse service
-        var connectionString = Environment.GetEnvironmentVariable("DataverseConnectionString") 
-            ?? "AuthType=OAuth;Url=https://your-org.crm.dynamics.com;ClientId=your-client-id;ClientSecret=your-client-secret;";
+        // Use mock service for local testing, real service for production
+        var useMockService = Environment.GetEnvironmentVariable("USE_MOCK_SERVICE")?.ToLower() == "true";
         
-        services.AddSingleton<IDataverseService>(sp =>
+        if (useMockService)
         {
-            var logger = sp.GetRequiredService<ILogger<DataverseService>>();
-            return new DataverseService(logger, connectionString);
-        });
+            // Use mock service for local testing without Dataverse
+            services.AddSingleton<IDataverseService, MockDataverseService>();
+        }
+        else
+        {
+            // Use real Dataverse service for production
+            var connectionString = Environment.GetEnvironmentVariable("DataverseConnectionString") 
+                ?? "AuthType=OAuth;Url=https://your-org.crm.dynamics.com;ClientId=your-client-id;ClientSecret=your-client-secret;";
+            
+            services.AddSingleton<IDataverseService>(sp =>
+            {
+                var logger = sp.GetRequiredService<ILogger<DataverseService>>();
+                return new DataverseService(logger, connectionString);
+            });
+        }
 
         // Add other services as needed
         // services.AddSingleton<IOtherService, OtherService>();
