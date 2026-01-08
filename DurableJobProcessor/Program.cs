@@ -21,9 +21,10 @@ var host = new HostBuilder()
 
         // Register Dataverse service
         // Use mock service for local testing, real service for production
-        var useMockService = Environment.GetEnvironmentVariable("USE_MOCK_SERVICE")?.ToLower() == "true";
+        var useMockService = Environment.GetEnvironmentVariable("USE_MOCK_SERVICE");
         
-        if (useMockService)
+        // Default to mock service if not specified (for local testing)
+        if (useMockService == null || useMockService.ToLower() == "true")
         {
             // Use mock service for local testing without Dataverse
             services.AddSingleton<IDataverseService, MockDataverseService>();

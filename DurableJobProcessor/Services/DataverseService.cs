@@ -40,8 +40,11 @@ public class DataverseService : IDataverseService
             // };
             // var results = await serviceClient.RetrieveMultipleAsync(query);
 
-            // Mock implementation - returns empty list
-            // Replace with actual Dataverse SDK calls in production
+            // IMPORTANT: This is a stub implementation that always returns empty results.
+            // Do NOT deploy this to production without implementing actual Dataverse SDK calls.
+            // Set USE_MOCK_SERVICE=false in production and implement the code above.
+            _logger.LogWarning("Using stub Dataverse implementation - this should not be used in production!");
+            
             await Task.Delay(100); // Simulate API call
             
             _logger.LogInformation("Retrieved 0 jobs with status {Status} from Dataverse", status);
@@ -79,7 +82,11 @@ public class DataverseService : IDataverseService
             // }
             // await serviceClient.UpdateAsync(entity);
 
-            // Mock implementation - simulates successful update
+            // IMPORTANT: This is a stub implementation that simulates successful updates.
+            // Do NOT deploy this to production without implementing actual Dataverse SDK calls.
+            // Set USE_MOCK_SERVICE=false in production and implement the code above.
+            _logger.LogWarning("Using stub Dataverse implementation - this should not be used in production!");
+            
             await Task.Delay(50); // Simulate API call
 
             _logger.LogInformation("Successfully updated job {JobId} status to {Status}", jobId, status);
@@ -104,7 +111,11 @@ public class DataverseService : IDataverseService
             // var entity = await serviceClient.RetrieveAsync("job_entity", jobId, new ColumnSet(true));
             // return MapEntityToJob(entity);
 
-            // Mock implementation - returns null
+            // IMPORTANT: This is a stub implementation that always returns null.
+            // Do NOT deploy this to production without implementing actual Dataverse SDK calls.
+            // Set USE_MOCK_SERVICE=false in production and implement the code above.
+            _logger.LogWarning("Using stub Dataverse implementation - this should not be used in production!");
+            
             await Task.Delay(50); // Simulate API call
 
             _logger.LogWarning("Job {JobId} not found in Dataverse", jobId);

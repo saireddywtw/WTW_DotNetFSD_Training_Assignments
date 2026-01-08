@@ -50,23 +50,11 @@ public class JobProcessingTimerTrigger
             string instanceId = await client.ScheduleNewOrchestrationInstanceAsync(
                 nameof(JobProcessingOrchestrator));
 
-            logger.LogInformation(
-                "Started orchestration with ID = '{InstanceId}' at {Time}",
+            logger.LogInformation("Started orchestration with ID = '{InstanceId}' at {Time}",
                 instanceId,
                 DateTime.UtcNow);
 
-            // Optional: Check if previous orchestration is still running
-            // This prevents overlapping orchestrations if processing takes longer than the schedule interval
-            var status = await client.GetInstanceAsync(instanceId);
-            
-            if (status != null)
-            {
-                logger.LogInformation(
-                    "Orchestration {InstanceId} status: {RuntimeStatus}",
-                    instanceId,
-                    status.RuntimeStatus);
-            }
-
+            // Log next schedule time
             logger.LogInformation(
                 "Next timer schedule at: {NextSchedule}",
                 timerInfo.ScheduleStatus?.Next);

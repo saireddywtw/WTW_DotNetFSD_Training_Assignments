@@ -136,6 +136,14 @@ public class JobProcessingOrchestrator
                     "Failed to update job {JobId} status to Failed: {ErrorMessage}", 
                     job.Id, 
                     updateEx.Message);
+                
+                // Include status update failure in result
+                return new ProcessingResult
+                {
+                    JobId = job.Id,
+                    Success = false,
+                    ErrorMessage = $"{ex.Message} (Status update also failed: {updateEx.Message})"
+                };
             }
 
             return new ProcessingResult

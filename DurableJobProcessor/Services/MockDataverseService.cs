@@ -12,7 +12,7 @@ public class MockDataverseService : IDataverseService
 {
     private readonly ILogger<MockDataverseService> _logger;
     private readonly Dictionary<Guid, Job> _jobStore;
-    private static bool _isFirstQuery = true;
+    private int _queryCount = 0;
 
     public MockDataverseService(ILogger<MockDataverseService> logger)
     {
@@ -69,9 +69,10 @@ public class MockDataverseService : IDataverseService
             await Task.Delay(100); // Simulate API call delay
 
             // Return jobs only on first query to simulate one-time processing
-            if (status == JobStatus.InQueued && _isFirstQuery)
+            // Using instance-based counter instead of static for thread safety
+            if (status == JobStatus.InQueued && _queryCount == 0)
             {
-                _isFirstQuery = false;
+                _queryCount++;
                 var queuedJobs = _jobStore.Values
                     .Where(j => j.Status == JobStatus.InQueued)
                     .ToList();
@@ -168,7 +169,7 @@ public class MockDataverseService : IDataverseService
     public void ResetMockData()
     {
         _jobStore.Clear();
-        _isFirstQuery = true;
+        _queryCount = 0;
         InitializeMockJobs();
         _logger.LogInformation("MOCK: Reset mock data store");
     }
